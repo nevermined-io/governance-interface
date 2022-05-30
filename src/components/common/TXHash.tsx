@@ -1,5 +1,6 @@
 import React from "react";
 import { Link, Text } from "theme-ui";
+import { EXPLORER_BASE_URL } from "../../util/config";
 
 interface Props {
   value?: string | null;
@@ -15,7 +16,7 @@ export const TXHash: React.FC<Props> = ({ value, truncate = true }: Props) => {
     : value;
   return (
     <Link
-      href={`https://explorer.celo.org/tx/${value}`}
+      href={`${EXPLORER_BASE_URL}/tx/${value}`}
       target="_blank"
       rel="noopener noreferrer"
     >

@@ -1,3 +1,4 @@
+import { useContractKit } from "@celo-tools/use-contractkit";
 import { BigNumber } from "ethers";
 import { useRouter } from "next/dist/client/router";
 import React from "react";
@@ -22,7 +23,6 @@ import { truncateAddress } from "../../../util/address";
 import { BIG_ZERO } from "../../../util/constants";
 import { humanFriendlyWei } from "../../../util/number";
 import { governanceLookup } from "..";
-import { useWeb3Context } from "web3-react";
 
 const RomulusIndexPage: React.FC = () => {
   const router = useRouter();
@@ -32,7 +32,7 @@ const RomulusIndexPage: React.FC = () => {
   const governanceName = romulusAddress
     ? governanceLookup[romulusAddress.toString()]
     : "Unknown";
-  const { account } = useWeb3Context();
+  const { address } = useContractKit();
   const [proposals] = useProposals((romulusAddress as string) || "");
   const [
     [
@@ -46,13 +46,13 @@ const RomulusIndexPage: React.FC = () => {
     ],
     refetchRomulus,
   ] = useRomulus((romulusAddress as string) || "");
-  const [latestBlockNumber] = useLatestBlockNumber();
+  const { BlockNumber: latestBlockNumber } = useLatestBlockNumber();
   const [
     { balance, releaseBalance, votingPower, releaseVotingPower },
     refetchVotingTokens,
   ] = useVotingTokens(
     (romulusAddress as string) || "",
-    account,
+    address,
     latestBlockNumber
   );
   const totalVotingPower = votingPower.add(releaseVotingPower);

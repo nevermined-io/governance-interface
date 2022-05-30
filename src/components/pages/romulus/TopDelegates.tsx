@@ -1,10 +1,11 @@
-import React from "react";
-import { Box, Flex, Text } from "theme-ui";
-import { useTopDelegates } from "../../../hooks/romulus/useTopDelegates";
-import { fromWei } from "web3-utils";
-import { Address } from "../../../components/common/Address";
-import { FixedSizeList } from "react-window";
 import { BigNumber } from "ethers";
+import React from "react";
+import { FixedSizeList } from "react-window";
+import { Box, Flex, Text } from "theme-ui";
+import { fromWei } from "web3-utils";
+
+import { Address } from "../../../components/common/Address";
+import { useTopDelegates } from "../../../hooks/romulus/useTopDelegates";
 
 interface RowProps {
   index: number;

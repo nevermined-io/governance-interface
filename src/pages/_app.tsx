@@ -3,10 +3,11 @@ import "normalize.css/normalize.css";
 import "@celo-tools/use-contractkit/lib/styles.css";
 import "react-toastify/dist/ReactToastify.css";
 
-import { ContractKitProvider } from "@celo-tools/use-contractkit";
 import { Global, ThemeProvider } from "@emotion/react";
 import * as Sentry from "@sentry/react";
 import { Integrations } from "@sentry/tracing";
+import { Web3ReactProvider } from "@web3-react/core";
+import { providers } from "ethers";
 import { AppProps } from "next/app";
 import React from "react";
 import Modal from "react-modal";
@@ -25,18 +26,14 @@ Sentry.init({
   // We recommend adjusting this value in production
   tracesSampleRate: 0.01,
 });
+function getLibrary(ethereum: any) {
+  return new providers.Web3Provider(ethereum);
+}
 
 const RomulusApp: React.FC<AppProps> = ({ Component }: AppProps) => {
   Modal.setAppElement("body");
   return (
-    <ContractKitProvider
-      dapp={{
-        name: "Romulus",
-        description: "A governance management system",
-        url: "https://romulus.page",
-        icon: "https://romulus.page/favicon.png",
-      }}
-    >
+    <Web3ReactProvider getLibrary={getLibrary}>
       <ThemeProvider theme={theme}>
         <Global styles={globalStyles} />
         <MainLayout>
@@ -44,7 +41,7 @@ const RomulusApp: React.FC<AppProps> = ({ Component }: AppProps) => {
         </MainLayout>
         <ToastContainer />
       </ThemeProvider>
-    </ContractKitProvider>
+    </Web3ReactProvider>
   );
 };
 

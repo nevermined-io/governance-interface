@@ -1,6 +1,7 @@
 import { ContractReceipt, ContractTransaction } from "ethers";
 import React, { useEffect, useState } from "react";
 import { Link, Text } from "theme-ui";
+import { EXPLORER_BASE_URL } from "../../../util/config";
 
 interface IProps {
   value: ContractTransaction | null;
@@ -21,7 +22,7 @@ export const TransactionHash: React.FC<IProps> = ({ value }: IProps) => {
   }
   return (
     <Link
-      href={`https://explorer.celo.org/tx/${value.hash}`}
+      href={`${EXPLORER_BASE_URL}/tx/${value.hash}`}
       target="_blank"
       rel="noopener noreferrer"
     >

@@ -4,6 +4,7 @@ import { FaExternalLinkAlt } from "react-icons/fa";
 import { FunctionCall } from "../../../common/FunctionCall";
 import { Submission } from ".";
 import { Card, Link, Text } from "theme-ui";
+import { EXPLORER_BASE_URL } from "../../../../util/config";
 
 interface Props {
   submission: Submission;
@@ -14,7 +15,7 @@ export const SubmissionCard: React.FC<Props> = ({ submission }: Props) => {
     <Card>
       <Text mr={2}>{submission.id}</Text>
       <Link
-        href={`https://explorer.celo.org/tx/${submission.submissionHash}`}
+        href={`${EXPLORER_BASE_URL}/tx/${submission.submissionHash}`}
         target="_blank"
         rel="noreferrer"
       >

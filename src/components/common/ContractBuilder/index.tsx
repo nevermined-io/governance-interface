@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { BytesLike, Interface } from "ethers/lib/utils";
+import { Interface } from "ethers/lib/utils";
 import { useFormik } from "formik";
 import React, { useEffect, useState } from "react";
 import { Button, Card, Flex, Heading, Input, Label, Select } from "theme-ui";

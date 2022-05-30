@@ -1,4 +1,3 @@
-import styled from "@emotion/styled";
 import { ParamType } from "ethers/lib/utils";
 import React from "react";
 import { Box, Flex, Grid, Text } from "theme-ui";

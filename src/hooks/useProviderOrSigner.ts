@@ -1,39 +1,39 @@
-import { useWeb3React } from "@web3-react/core";
-import { Web3ReactContextInterface } from "@web3-react/core/dist/types";
-import { providers } from "ethers";
-import {
-  JsonRpcSigner,
-  Web3Provider,
-} from "ethers/node_modules/@ethersproject/providers";
+import { useContractKit } from "@celo-tools/use-contractkit";
+import { JsonRpcSigner, Web3Provider } from "@ethersproject/providers";
+import { ExternalProvider } from "@ethersproject/providers/lib/web3-provider";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 export const useProvider = (): Web3Provider => {
-  const { library }: Web3ReactContextInterface<Web3Provider> = useWeb3React();
-
-  return library
-    ? library
-    : // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      new providers.Web3Provider((window as any).ethereum);
+  const { kit } = useContractKit();
+  const provider = kit.web3.currentProvider as unknown as ExternalProvider;
+  return useMemo(() => {
+    return new Web3Provider(provider);
+  }, [provider]);
 };
 
 export const useProviderOrSigner = (): Web3Provider | JsonRpcSigner => {
-  const { account } = useWeb3React();
+  const { kit } = useContractKit();
   const provider = useProvider();
   return useMemo(() => {
-    return account ? provider?.getSigner(account) : provider;
-  }, [provider, account]);
+    return kit.defaultAccount
+      ? provider.getSigner(kit.defaultAccount)
+      : provider;
+  }, [provider, kit.defaultAccount]);
 };
 
 export const useGetConnectedSigner = (): (() => Promise<JsonRpcSigner>) => {
-  const provider = useProvider();
-  const { account } = useWeb3React();
+  const { kit, connect } = useContractKit();
+  const signer = useProviderOrSigner();
   return useCallback(async () => {
-    if (account && provider) {
-      return provider.getSigner(account);
+    if (kit.defaultAccount) {
+      return signer as JsonRpcSigner;
     }
-    const accounts = await provider.listAccounts();
-    return provider.getSigner(accounts[0]);
-  }, [provider, account]);
+    const connector = await connect();
+    const nextKit = await connector.initialise();
+    const nextProvider = nextKit.kit.web3
+      .currentProvider as unknown as ExternalProvider;
+    return new Web3Provider(nextProvider).getSigner(nextKit.kit.defaultAccount);
+  }, [signer, kit, connect]);
 };
 
 export const useLazyConnectedSigner = (): {

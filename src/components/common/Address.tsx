@@ -2,7 +2,6 @@ import { getAddress } from "ethers/lib/utils";
 import React from "react";
 import { Link } from "theme-ui";
 
-import { EXPLORER_BASE_URL } from "../../util/config";
 import { KNOWN_ADDRESSES } from "./FunctionCall/knownABIs";
 
 interface Props {
@@ -35,7 +34,7 @@ export const Address: React.FC<Props> = ({
 
   return (
     <Link
-      href={`${EXPLORER_BASE_URL}/address/${fmt.toLowerCase()}/transactions`}
+      href={`https://explorer.celo.org/address/${fmt.toLowerCase()}/transactions`}
       target="_blank"
       rel="noopener noreferrer"
       style={{ textDecoration: "none" }}

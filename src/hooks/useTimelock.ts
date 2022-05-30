@@ -1,10 +1,9 @@
-import { Provider } from "@ethersproject/abstract-provider";
 import { useEffect, useMemo, useState } from "react";
 
-import { INVMTimelock, INVMTimelock__factory } from "../generated";
+import { ITimelock, ITimelock__factory } from "../generated";
 import { useProvider } from "./useProviderOrSigner";
 
-interface INVMTimelockConfig {
+interface ITimelockConfig {
   gracePeriod: number;
   maximumDelay: number;
   minimumDelay: number;
@@ -15,14 +14,13 @@ interface INVMTimelockConfig {
 
 export const useTimelock = (
   address: string
-): { timelock: INVMTimelock; config: INVMTimelockConfig | null } => {
+): { timelock: ITimelock; config: ITimelockConfig | null } => {
   const provider = useProvider();
   const timelock = useMemo(
-    () =>
-      INVMTimelock__factory.connect(address, provider as unknown as Provider),
+    () => ITimelock__factory.connect(address, provider),
     [address, provider]
   );
-  const [config, setConfig] = useState<INVMTimelockConfig | null>(null);
+  const [config, setConfig] = useState<ITimelockConfig | null>(null);
 
   useEffect(() => {
     void (async () => {

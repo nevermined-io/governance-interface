@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+import { MultiSig, MultiSig__factory } from "../generated";
 import { useProvider } from "./useProviderOrSigner";
 
 /**

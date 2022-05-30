@@ -46,7 +46,7 @@ const RomulusIndexPage: React.FC = () => {
     ],
     refetchRomulus,
   ] = useRomulus((romulusAddress as string) || "");
-  const { BlockNumber: latestBlockNumber } = useLatestBlockNumber();
+  const [latestBlockNumber] = useLatestBlockNumber();
   const [
     { balance, releaseBalance, votingPower, releaseVotingPower },
     refetchVotingTokens,

@@ -5,7 +5,7 @@ export const getPastEvents = async <T>(
   filter: EventFilter,
   fromBlock: number,
   toBlock: number
-): Promise<T[]> => {
+) => {
   const events = [];
   const bucketSize = 100_000;
   for (

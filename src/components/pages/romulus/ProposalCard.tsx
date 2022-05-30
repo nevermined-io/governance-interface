@@ -1,4 +1,4 @@
-import { useWeb3React } from "@web3-react/core";
+import { useContractKit } from "@celo-tools/use-contractkit";
 import { BigNumber } from "ethers";
 import moment from "moment";
 import { useRouter } from "next/router";
@@ -6,12 +6,12 @@ import React from "react";
 import { Box, Button, Card, Flex, Heading, Text } from "theme-ui";
 
 import { Address } from "../../../components/common/Address";
-import { IVotingDelegates__factory } from "../../../generated";
-import { TypedEvent } from "../../../generated/common";
+import { RomulusDelegate__factory } from "../../../generated";
+import { TypedEvent } from "../../../generated/commons";
 import { useProposal } from "../../../hooks/romulus/useProposal";
 import { useVoteCasts } from "../../../hooks/romulus/useVoteCasts";
 import { useVotingTokens } from "../../../hooks/romulus/useVotingTokens";
-import { useLatestBlockNumber } from "../../../hooks/useLatestBlockNumber";
+import { useAsyncState } from "../../../hooks/useAsyncState";
 import { useGetConnectedSigner } from "../../../hooks/useProviderOrSigner";
 import { ProposalState, Support } from "../../../types/romulus";
 import { BIG_ZERO } from "../../../util/constants";
@@ -49,8 +49,8 @@ export const ProposalCard: React.FC<IProps> = ({ proposalEvent }) => {
   const router = useRouter();
   const getConnectedSigner = useGetConnectedSigner();
   const { address: romulusAddress } = router.query;
-  const { account } = useWeb3React();
-  const { BlockNumber: latestBlockNumber } = useLatestBlockNumber();
+  const { kit, address } = useContractKit();
+  const [latestBlockNumber] = useAsyncState(0, kit.web3.eth.getBlockNumber);
   const [{ proposal, proposalState }, refetchProposal] = useProposal(
     (romulusAddress as string) || "",
     proposalEvent.args.id
@@ -64,7 +64,7 @@ export const ProposalCard: React.FC<IProps> = ({ proposalEvent }) => {
     if (!signer) {
       throw new Error("no signer");
     }
-    const romulus = IVotingDelegates__factory.connect(
+    const romulus = RomulusDelegate__factory.connect(
       romulusAddress as string,
       signer
     );
@@ -79,7 +79,7 @@ export const ProposalCard: React.FC<IProps> = ({ proposalEvent }) => {
 
   const [{ votingPower, releaseVotingPower }] = useVotingTokens(
     (romulusAddress as string) || "",
-    account,
+    address,
     proposalEvent.args.startBlock
   );
   const [voteCasts] = useVoteCasts((romulusAddress as string) || "");

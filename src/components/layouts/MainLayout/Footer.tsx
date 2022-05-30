@@ -1,7 +1,8 @@
+import { css } from "@emotion/react";
+import Link from "next/link";
 import Image from "next/image";
 import React from "react";
-import { Flex } from "theme-ui";
-
+import { Flex, Text } from "theme-ui";
 import { socialLink, socialLinks } from "./SocialLinks";
 
 export const Footer: React.FC = () => {
@@ -17,7 +18,7 @@ export const Footer: React.FC = () => {
       {socialLinks.map((element: socialLink, index) => {
         return (
           <Flex sx={{ mx: 2 }} key={index}>
-            <a href={element.link} target="_blank" rel="noreferrer">
+            <a href={element.link} target="_blank">
               <Image
                 src={element.imageSource}
                 width={20}
